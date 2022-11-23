@@ -2,30 +2,31 @@ class ApplicationController < ActionController::API
   before_action :require_login
 
   def encode_token(payload)
-    JWT.encode(payload, 'zcx8u9xzc9u8dsau89dsajo')
+    # should store secret in env variable
+    JWT.encode(payload, 'irkdhwusixedhfrowmopsqwj08317840291')
   end
 
   def auth_header
-    request.headers['Authorization'].split(' ')[1]
+    # { Authorization: 'Bearer <token>' }
+    request.headers['Authorization']
   end
 
   def decoded_token
     if auth_header
+      token = auth_header.split(' ')[1]
+      # header: { 'Authorization': 'Bearer <token>' }
       begin
-        JWT.decode(auth_header, 'zcx8u9xzc9u8dsau89dsajo', true, algorithm: 'HS256')
+        JWT.decode(token, 'irkdhwusixedhfrowmopsqwj08317840291', true, algorithm: 'HS256')
       rescue JWT::DecodeError
-        []
+        nil
       end
     end
   end
 
   def session_user
-    decoded_hash = decoded_token
-    if !decoded_hash.empty?
-      user_id = decoded_hash[0]['user_id']
+    if decoded_token
+      user_id = decoded_token[0]['user_id']
       @user = User.find_by(id: user_id)
-    else
-      nil
     end
   end
 
