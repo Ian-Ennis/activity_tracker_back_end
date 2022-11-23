@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   namespace :api do
     namespace :v1 do
       resources :users, only: [:create]
@@ -9,7 +8,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :activities
+  resources :activities, only: [:index, :create, :destroy]
 
   get '*path',
     to: 'fallback#index',
