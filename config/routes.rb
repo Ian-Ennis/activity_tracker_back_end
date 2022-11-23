@@ -1,8 +1,14 @@
 Rails.application.routes.draw do
-  resources :users
-  resources :activities 
-        
-  post "/login", to: "auth#login"
+  namespace :api do
+    namespace :v1 do
+      resources :users, only: [:create]
+
+      post '/login', to: 'auth#create'
+      get '/profile', to: 'users#profile'
+    end
+  end
+
+  resources :activities, only: [:index, :create, :destroy]
 
   get '*path',
     to: 'fallback#index',

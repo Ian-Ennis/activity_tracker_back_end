@@ -2,23 +2,18 @@ class ActivitiesController < ApplicationController
     rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
 
     def index
-        activity = Activity.all
-        render json: activity, status: :ok
-    end
-
-    def show 
-        render json: @activity
+        @user = User.find(@user.id)
+        @activities = @user.activities
+        render json: @activities
     end
 
     def create
-        activity = Activity.create!(activity_params)
-        render json: activity, status: :created
-    end
-
-    def update
-        activity = find_activity
-        activity.update(activity_params)
-        render json: activity
+        activity = Activity.create!(user_id: params[:user_id], name: params[:name], date: params[:date], minutes: params[:minutes], notes: params[:notes])
+        if activity.valid?
+            render json: activity, status: :created
+        else
+            render json: {error: "Activity could not be created"}, status: :unprocessable_entity
+        end
     end
 
     def destroy
@@ -28,13 +23,13 @@ class ActivitiesController < ApplicationController
     end
 
     private
+    
+    def activity_params
+        params.permit(:user_id, :date, :name, :yoga_type, :workout, :distance, :minutes, :notes)
+    end
 
     def find_activity
         Activity.find(params[:id])
-    end
-
-    def activity_params
-        params.permit(:date, :name, :length, :minutes, :notes, :yoga_type, :workout, :distance)
     end
 
     def render_not_found_response
