@@ -37737,3 +37737,26 @@ No serializer found for resource: #<Activity id: 9, date: "02/28/2022", name: "m
 Completed 200 OK in 7ms (Views: 3.4ms | ActiveRecord: 0.6ms | Allocations: 2778)
 
 
+Started POST "/api/v1/login" for ::1 at 2022-11-23 10:51:00 -0700
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::V1::AuthController#create as */*
+  Parameters: {"username"=>"patrick", "password"=>"[FILTERED]"}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."username" = $1 LIMIT $2[0m  [["username", "patrick"], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/auth_controller.rb:5:in `create'
+[active_model_serializers] Rendered ActiveModel::Serializer::Null with Hash (1.47ms)
+Completed 202 Accepted in 270ms (Views: 4.0ms | ActiveRecord: 4.4ms | Allocations: 8386)
+
+
+Started GET "/activities" for ::1 at 2022-11-23 10:51:28 -0700
+Processing by ActivitiesController#index as */*
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:29:in `session_user'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/activities_controller.rb:5:in `index'
+  [1m[36mActivity Load (0.6ms)[0m  [1m[34mSELECT "activities".* FROM "activities" WHERE "activities"."user_id" = $1[0m  [["user_id", 3]]
+  ↳ app/controllers/activities_controller.rb:7:in `index'
+No serializer found for resource: #<Activity id: 9, date: "02/28/2022", name: "meditation", minutes: 6, notes: "tight", yoga_type: nil, workout: nil, distance: nil, user_id: 3, created_at: "2022-11-23 17:18:34.305566000 +0000", updated_at: "2022-11-23 17:18:34.305566000 +0000">
+[active_model_serializers] Rendered ActiveModel::Serializer::CollectionSerializer with Activity::ActiveRecord_Associations_CollectionProxy (1.36ms)
+Completed 200 OK in 45ms (Views: 25.2ms | ActiveRecord: 3.9ms | Allocations: 10872)
+
+
