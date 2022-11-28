@@ -1,5 +1,5 @@
 ## To run the back end:
-* fork and clone 
+* clone 
 * bundle
   ```sh
   bundle install
